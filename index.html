@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RoomSync — UGB FERP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="roomsync-ugb.css">
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-left">
+    <div>
+      <div class="login-logo">
+        <div class="login-logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#D4A853" stroke-width="2">
+            <rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/>
+            <rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/>
+          </svg>
+        </div>
+        <div class="login-logo-text">RoomSync</div>
+      </div>
+      <div style="font-size:11px;color:var(--text-3);font-family:var(--mono);letter-spacing:1px">UGB FERP · SISTEMA INSTITUCIONAL</div>
+    </div>
+    <div style="text-align:center">
+      <div class="login-title">Sistema de Alocação Inteligente</div>
+      <div style="font-size:13px;color:var(--text-3);margin-top:8px;font-family:var(--mono)">Universidade — Painel Institucional</div>
+    </div>
+    <div class="login-form">
+      <div>
+        <label class="login-label">MATRÍCULA / EMAIL</label>
+        <input type="text" placeholder="ex: admin@ugb.edu.br" id="l-user">
+      </div>
+      <div>
+        <label class="login-label">SENHA</label>
+        <input type="password" placeholder="••••••••" id="l-pass">
+      </div>
+      <button class="btn-gold" onclick="doLogin()">Acessar Sistema</button>
+      <div class="login-forgot">Esqueci minha senha</div>
+    </div>
+    <div style="position:relative;width:100%;text-align:center">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text-3)">RoomSync v2.4.1 · UGB FERP · © 2024</div>
+    </div>
+  </div>
+  <div class="login-right">
+    <canvas id="core-canvas"></canvas>
+    <div class="login-particles" id="particles"></div>
+    <div class="building-iso">
+      <svg viewBox="0 0 500 420" width="480" height="380" xmlns="http://www.w3.org/2000/svg">
+        <!-- Isometric building UGB -->
+        <defs>
+          <filter id="glow"><feGaussianBlur stdDeviation="3" result="cb"/><feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <!-- Ground shadow -->
+        <ellipse cx="250" cy="390" rx="200" ry="18" fill="#D4A853" opacity="0.06"/>
+        <!-- Building B (back) -->
+        <g opacity="0.8">
+          <polygon points="80,180 220,110 360,180 220,250" fill="#1A1A1A" stroke="#262626" stroke-width="0.5"/>
+          <polygon points="220,250 360,180 360,320 220,390" fill="#111111" stroke="#262626" stroke-width="0.5"/>
+          <polygon points="80,180 220,250 220,390 80,320" fill="#161616" stroke="#262626" stroke-width="0.5"/>
+          <!-- Windows back -->
+          <g fill="#D4A853" opacity="0.4">
+            <rect x="100" y="200" width="12" height="10" rx="1"/><rect x="120" y="200" width="12" height="10" rx="1"/>
+            <rect x="140" y="200" width="12" height="10" rx="1"/><rect x="100" y="220" width="12" height="10" rx="1"/>
+            <rect x="120" y="220" width="12" height="10" rx="1"/>
+          </g>
+          <!-- Lit windows -->
+          <rect x="160" y="200" width="12" height="10" rx="1" fill="#D4A853" opacity="0.9" filter="url(#glow)"/>
+          <rect x="100" y="240" width="12" height="10" rx="1" fill="#E8C87A" opacity="0.8" filter="url(#glow)"/>
+          <rect x="240" y="210" width="12" height="10" rx="1" fill="#D4A853" opacity="0.9" filter="url(#glow)"/>
+          <rect x="260" y="230" width="12" height="10" rx="1" fill="#D4A853" opacity="0.85" filter="url(#glow)"/>
+          <rect x="280" y="210" width="12" height="10" rx="1" fill="#E8C87A" opacity="0.7" filter="url(#glow)"/>
+        </g>
+        <!-- Building A (front, ICEB) -->
+        <g>
+          <polygon points="140,260 310,175 420,240 250,325" fill="#222222" stroke="#333" stroke-width="0.5"/>
+          <polygon points="250,325 420,240 420,360 250,445" fill="#161616" stroke="#262626" stroke-width="0.5"/>
+          <polygon points="140,260 250,325 250,445 140,380" fill="#1A1A1A" stroke="#262626" stroke-width="0.5"/>
+          <!-- Roof accent -->
+          <line x1="140" y1="260" x2="310" y2="175" stroke="#D4A853" stroke-width="0.8" opacity="0.4"/>
+          <!-- Windows front-right -->
+          <g fill="#1E1E1E">
+            <rect x="270" y="260" width="18" height="14" rx="1"/><rect x="295" y="260" width="18" height="14" rx="1"/>
+            <rect x="320" y="260" width="18" height="14" rx="1"/><rect x="345" y="260" width="18" height="14" rx="1"/>
+            <rect x="270" y="283" width="18" height="14" rx="1"/><rect x="295" y="283" width="18" height="14" rx="1"/>
+            <rect x="320" y="283" width="18" height="14" rx="1"/><rect x="345" y="283" width="18" height="14" rx="1"/>
+            <rect x="270" y="306" width="18" height="14" rx="1"/><rect x="295" y="306" width="18" height="14" rx="1"/>
+            <rect x="320" y="306" width="18" height="14" rx="1"/>
+          </g>
+          <!-- Lit windows front -->
+          <rect x="295" y="260" width="18" height="14" rx="1" fill="#D4A853" opacity="0.95" filter="url(#glow)"/>
+          <rect x="345" y="283" width="18" height="14" rx="1" fill="#E8C87A" opacity="0.9" filter="url(#glow)"/>
+          <rect x="270" y="306" width="18" height="14" rx="1" fill="#D4A853" opacity="0.85" filter="url(#glow)"/>
+          <rect x="320" y="260" width="18" height="14" rx="1" fill="#E8C87A" opacity="0.7" filter="url(#glow)"/>
+          <!-- Windows front-left face -->
+          <rect x="155" y="282" width="16" height="12" rx="1" fill="#1E1E1E"/>
+          <rect x="175" y="282" width="16" height="12" rx="1" fill="#D4A853" opacity="0.9" filter="url(#glow)"/>
+          <rect x="155" y="302" width="16" height="12" rx="1" fill="#1E1E1E"/>
+          <rect x="175" y="302" width="16" height="12" rx="1" fill="#1E1E1E"/>
+          <!-- Door -->
+          <rect x="220" y="360" width="22" height="28" rx="2" fill="#1A1A1A" stroke="#D4A853" stroke-width="0.5" opacity="0.5"/>
+          <!-- UGB sign -->
+          <text x="248" y="198" font-family="Geist Mono, monospace" font-size="9" fill="#D4A853" opacity="0.6" text-anchor="middle">UGB FERP</text>
+        </g>
+        <!-- Connecting path -->
+        <line x1="220" y1="250" x2="220" y2="280" stroke="#262626" stroke-width="1" stroke-dasharray="3,3"/>
+      </svg>
+    </div>
+    <div class="login-float">571 turmas · 35 salas · 2 prédios · UGB FERP</div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" style="display:none">
+  <div id="sidebar">
+    <div class="sb-logo">
+      <div class="sb-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#D4A853" stroke-width="2">
+          <rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/>
+          <rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/>
+        </svg>
+      </div>
+      <div>
+        <div class="sb-name">RoomSync</div>
+        <div class="sb-sub">UGB FERP</div>
+      </div>
+    </div>
+    <nav class="sb-nav">
+      <div class="nav-item active" onclick="navigate('dashboard',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-item" onclick="navigate('allocs',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+        Alocações
+      </div>
+      <div class="nav-item" onclick="navigate('rooms',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        Salas
+      </div>
+      <div class="nav-item" onclick="navigate('classes',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Turmas
+      </div>
+      <div class="nav-item" onclick="navigate('optimizer',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Otimizador
+      </div>
+      <div class="nav-item" onclick="navigate('map',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+        Mapa
+      </div>
+      <div class="nav-item" onclick="showToast('Relatórios em breve')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Relatórios
+      </div>
+      <div class="nav-item" onclick="showToast('Configurações em breve')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Configurações
+      </div>
+    </nav>
+    <div class="sb-bottom">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <div style="width:28px;height:28px;border-radius:6px;background:var(--gold-dim);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--gold)">AD</div>
+        <div>
+          <div style="font-size:12px;font-weight:500">Admin FERP</div>
+          <div style="font-size:10px;color:var(--text-3);font-family:var(--mono)">Coordenação</div>
+        </div>
+      </div>
+      <div class="sb-version">v2.4.1 · Semestre 2024/1</div>
+    </div>
+  </div>
+
+  <div id="main">
+    <!-- DASHBOARD -->
+    <div id="screen-dashboard" class="screen active">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="page-title">Painel</div>
+          <div class="semester-badge">Semestre 2024/1</div>
+        </div>
+        <button class="btn-new" onclick="navigate('allocs',null)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nova Alocação
+        </button>
+      </div>
+      <div class="content">
+        <!-- Metrics -->
+        <div class="metrics-row">
+          <div class="metric-card">
+            <div class="metric-label">Turmas Alocadas</div>
+            <div class="metric-value c-gold"><span style="font-family:var(--mono)">568</span><span style="font-size:16px;color:var(--text-3);margin-left:4px">/ 571</span></div>
+            <div class="metric-sub">3 pendentes de realocação</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Taxa de Ocupação</div>
+            <div class="metric-value c-green">82,4%</div>
+            <div class="metric-sub" style="color:var(--green)">▲ +3.1% vs semestre anterior</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Conflitos Ativos</div>
+            <div class="metric-value c-orange">7</div>
+            <div class="metric-sub">Requer atenção</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Salas Virtuais</div>
+            <div class="metric-value" style="color:var(--red)">2</div>
+            <div class="metric-sub" style="color:var(--red)">Deve ser 0 idealmente</div>
+          </div>
+        </div>
+
+        <!-- Score + Alerts -->
+        <div class="score-section">
+          <div class="score-card">
+            <div class="score-title">Score de Qualidade da Alocação</div>
+            <div class="score-center">
+              <div class="score-gauge-wrap">
+                <canvas id="gauge-canvas" width="140" height="140"></canvas>
+              </div>
+              <div>
+                <div style="font-size:11px;color:var(--text-3);font-family:var(--mono);margin-bottom:6px">SCORE ATUAL</div>
+                <div class="score-num">87.3</div>
+                <div class="score-pts">Função Objetivo: 643.570 pts</div>
+                <div class="score-compare" style="margin-top:12px">
+                  <div class="score-row"><span>Melhor solução:</span><span>643.570 pts</span></div>
+                  <div class="score-row"><span>Média histórica:</span><span>649.738 pts</span></div>
+                  <div class="score-row"><span>Valor inicial:</span><span>767.902 pts</span></div>
+                  <div class="score-row"><span>Melhoria obtida:</span><span style="color:var(--green)">−16.2%</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="penalties-wrap">
+              <div class="pen-badge" style="background:rgba(239,68,68,0.1);color:var(--red);border:1px solid rgba(239,68,68,0.2)">Excesso: w=100</div>
+              <div class="pen-badge" style="background:rgba(249,115,22,0.08);color:var(--orange);border:1px solid rgba(249,115,22,0.15)">Prédios: w=500</div>
+              <div class="pen-badge" style="background:rgba(212,168,83,0.08);color:var(--gold);border:1px solid rgba(212,168,83,0.2)">Virtual: w=200</div>
+              <div class="pen-badge" style="background:var(--elevated);color:var(--text-3);border:1px solid var(--border)">Ociosidade: w=1</div>
+              <div class="pen-badge" style="background:var(--elevated);color:var(--text-3);border:1px solid var(--border)">Mesmo curso: w=20</div>
+            </div>
+          </div>
+          <div class="alerts-card">
+            <div style="font-size:11px;color:var(--text-3);font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Alertas em Tempo Real</div>
+            <div class="alert-item a-red">
+              <div class="alert-dot"></div>
+              <div><strong style="color:var(--red)">EXCESSO</strong> — Sala ICEB 01 (70 alunos) alocada com 78 alunos. Turma: ENG-BCC-5P-A.</div>
+            </div>
+            <div class="alert-item a-red">
+              <div class="alert-dot"></div>
+              <div><strong style="color:var(--red)">EXCESSO</strong> — Pavilhão 203 (54 alunos) com turma de 61 alunos. ADM-3P-B.</div>
+            </div>
+            <div class="alert-item a-orange">
+              <div class="alert-dot"></div>
+              <div><strong style="color:var(--orange)">SEPARAÇÃO</strong> — Engenharia Civil 4° período dividido entre ICEB e Pavilhão no mesmo horário.</div>
+            </div>
+            <div class="alert-item a-orange">
+              <div class="alert-dot"></div>
+              <div><strong style="color:var(--orange)">SEPARAÇÃO</strong> — Medicina Veterinária 2° período em 3 salas distintas · Ter 07h30.</div>
+            </div>
+            <div class="alert-item a-dark">
+              <div class="alert-dot"></div>
+              <div><strong style="color:#C04040">VIRTUAL</strong> — Turma DIR-6P-A não possui sala física disponível no turno noturno. Sala fictícia criada.</div>
+            </div>
+            <div class="alert-item a-dark">
+              <div class="alert-dot"></div>
+              <div><strong style="color:#C04040">VIRTUAL</strong> — Turma PSI-8P-B sem sala noturna. Sala virtual temporária ativa.</div>
+            </div>
+            <div class="alert-item a-orange">
+              <div class="alert-dot"></div>
+              <div><strong style="color:var(--orange)">PRÉDIO</strong> — Farmácia 5° período com aulas em prédios diferentes na quarta-feira.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Heatmap -->
+        <div class="heatmap-card">
+          <div class="card-title">
+            Mapa de Calor — Ocupação Semanal
+            <div style="display:flex;gap:12px;font-size:10px;font-family:var(--mono)">
+              <span style="color:var(--green)">■ 75–100%</span>
+              <span style="color:var(--orange)">■ 50–74%</span>
+              <span style="color:var(--red)">■ >100%</span>
+              <span style="color:var(--text-3)">■ Livre</span>
+            </div>
+          </div>
+          <div id="heatmap-container"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALLOCS -->
+    <div id="screen-allocs" class="screen">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="page-title">Alocações</div>
+          <div class="semester-badge">568 / 571 alocadas</div>
+        </div>
+        <button class="btn-new" onclick="showToast('Nova alocação manual criada')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nova Alocação
+        </button>
+      </div>
+      <div class="content">
+        <div class="filter-row">
+          <select class="filter-select"><option>Todos os Prédios</option><option>ICEB</option><option>Pavilhão</option></select>
+          <select class="filter-select"><option>Todos os Turnos</option><option>Manhã</option><option>Tarde</option><option>Noite</option></select>
+          <select class="filter-select"><option>Todos os Dias</option><option>Segunda</option><option>Terça</option><option>Quarta</option><option>Quinta</option><option>Sexta</option><option>Sábado</option></select>
+          <select class="filter-select"><option>Todos os Cursos</option><option>Engenharia Civil</option><option>Administração</option><option>Direito</option><option>Medicina Veterinária</option><option>Farmácia</option><option>Psicologia</option></select>
+          <select class="filter-select"><option>Todos os Status</option><option>OK</option><option>Excesso</option><option>Virtual</option><option>Ocioso</option></select>
+        </div>
+        <div class="table-wrap">
+          <table id="alloc-table">
+            <thead>
+              <tr>
+                <th>Sala</th><th>Capac.</th><th>Horário</th><th>Disciplina</th><th>Curso</th>
+                <th>Per.</th><th>Turma</th><th>Alunos</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="alloc-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROOMS -->
+    <div id="screen-rooms" class="screen">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="page-title">Salas</div>
+          <div class="semester-badge">35 salas · 2 prédios</div>
+        </div>
+        <div class="tab-row">
+          <button class="tab-btn active" id="tab-all" onclick="filterRooms('all',this)">Todos</button>
+          <button class="tab-btn" id="tab-iceb" onclick="filterRooms('ICEB',this)">ICEB</button>
+          <button class="tab-btn" id="tab-pav" onclick="filterRooms('Pavilhão',this)">Pavilhão</button>
+        </div>
+      </div>
+      <div class="content">
+        <div class="rooms-grid" id="rooms-grid"></div>
+      </div>
+    </div>
+
+    <!-- CLASSES -->
+    <div id="screen-classes" class="screen">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="page-title">Turmas</div>
+          <div class="semester-badge">571 turmas · 2.280 horários</div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Código</th><th>Disciplina</th><th>Curso</th><th>Período</th><th>Alunos</th><th>Turno</th><th>Sala Atual</th><th>Status</th></tr></thead>
+            <tbody id="classes-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTIMIZER -->
+    <div id="screen-optimizer" class="screen">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="page-title">Otimizador</div>
+          <div class="semester-badge">Simulated Annealing</div>
+        </div>
+      </div>
+      <div class="content" style="flex:1;overflow:hidden">
+        <div class="opt-grid" style="flex:1;min-height:0">
+          <div class="opt-params">
+            <div class="param-group">
+              <div class="param-label">Parâmetros do Algoritmo</div>
+              <div class="param-row"><span class="param-name">Iterações por temp.</span><input class="param-input" value="2500" type="number"></div>
+              <div class="param-row"><span class="param-name">Taxa resfriamento (α)</span><input class="param-input" value="0.98" type="number" step="0.01"></div>
+              <div class="param-row"><span class="param-name">Temperatura inicial</span><input class="param-input" value="5000" type="number"></div>
+              <div class="param-row"><span class="param-name">Temperatura congelamento</span><input class="param-input" value="0.1" type="number" step="0.01"></div>
+              <div class="param-row"><span class="param-name">Tempo máximo (min)</span><input class="param-input" value="10" type="number"></div>
+            </div>
+            <div class="param-group">
+              <div class="param-label">Pesos das Penalidades</div>
+              <div class="slider-row">
+                <div class="slider-header"><span class="slider-name">Excesso de alunos</span><span class="slider-val" id="sv1">100</span></div>
+                <input type="range" min="0" max="500" value="100" oninput="document.getElementById('sv1').textContent=this.value">
+              </div>
+              <div class="slider-row">
+                <div class="slider-header"><span class="slider-name">Ociosidade de carteiras</span><span class="slider-val" id="sv2">1</span></div>
+                <input type="range" min="0" max="50" value="1" oninput="document.getElementById('sv2').textContent=this.value">
+              </div>
+              <div class="slider-row">
+                <div class="slider-header"><span class="slider-name">Mesmo curso em salas distintas</span><span class="slider-val" id="sv3">20</span></div>
+                <input type="range" min="0" max="100" value="20" oninput="document.getElementById('sv3').textContent=this.value">
+              </div>
+              <div class="slider-row">
+                <div class="slider-header"><span class="slider-name">Turmas em prédios diferentes</span><span class="slider-val" id="sv4">500</span></div>
+                <input type="range" min="0" max="1000" value="500" oninput="document.getElementById('sv4').textContent=this.value">
+              </div>
+              <div class="slider-row">
+                <div class="slider-header"><span class="slider-name">Salas virtuais</span><span class="slider-val" id="sv5">200</span></div>
+                <input type="range" min="0" max="500" value="200" oninput="document.getElementById('sv5').textContent=this.value">
+              </div>
+            </div>
+            <div class="param-group">
+              <div class="param-label">Probabilidade dos Movimentos</div>
+              <div class="slider-row">
+                <div class="slider-header"><span class="slider-name">Realoc. (mesmo prédio)</span><span class="slider-val" id="mv1">20%</span></div>
+                <input type="range" min="0" max="100" value="20" oninput="document.getElementById('mv1').textContent=this.value+'%'">
+              </div>
+              <div class="slider-row">
+                <div class="slider-header"><span class="slider-name">Troca entre salas (1 prédio)</span><span class="slider-val" id="mv2">20%</span></div>
+                <input type="range" min="0" max="100" value="20" oninput="document.getElementById('mv2').textContent=this.value+'%'">
+              </div>
+              <div class="slider-row">
+                <div class="slider-header"><span class="slider-name">Realoc. entre prédios</span><span class="slider-val" id="mv3">20%</span></div>
+                <input type="range" min="0" max="100" value="20" oninput="document.getElementById('mv3').textContent=this.value+'%'">
+              </div>
+              <div class="slider-row">
+                <div class="slider-header"><span class="slider-name">Troca entre prédios</span><span class="slider-val" id="mv4">20%</span></div>
+                <input type="range" min="0" max="100" value="20" oninput="document.getElementById('mv4').textContent=this.value+'%'">
+              </div>
+              <div class="slider-row">
+                <div class="slider-header"><span class="slider-name">Turno/Curso → mesma sala</span><span class="slider-val" id="mv5">20%</span></div>
+                <input type="range" min="0" max="100" value="20" oninput="document.getElementById('mv5').textContent=this.value+'%'">
+              </div>
+            </div>
+            <button class="btn-run" id="run-btn" onclick="runOptimizer()">Iniciar Otimização</button>
+          </div>
+
+          <div class="opt-right">
+            <div class="chart-card">
+              <div class="card-title">Curva de Convergência
+                <div style="display:flex;gap:12px;font-size:10px;font-family:var(--mono)">
+                  <span style="color:var(--gold)">── Melhor</span>
+                  <span style="color:var(--text-3)">── Atual</span>
+                </div>
+              </div>
+              <canvas id="conv-canvas" height="180"></canvas>
+            </div>
+            <div class="progress-grid">
+              <div class="prog-item"><div class="prog-val" id="p-temp">5000</div><div class="prog-label">Temperatura</div></div>
+              <div class="prog-item"><div class="prog-val" id="p-iter">0</div><div class="prog-label">Iteração</div></div>
+              <div class="prog-item"><div class="prog-val" id="p-best">767.902</div><div class="prog-label">Melhor Valor</div></div>
+              <div class="prog-item"><div class="prog-val" id="p-imp">0%</div><div class="prog-label">Melhoria</div></div>
+              <div class="prog-item"><div class="prog-val" id="p-time">00:00</div><div class="prog-label">Tempo</div></div>
+            </div>
+            <div class="chart-card" style="flex:none">
+              <div class="card-title">Log de Execução</div>
+              <div id="opt-log" style="font-family:var(--mono);font-size:11px;color:var(--text-3);height:80px;overflow-y:auto;line-height:1.8">
+                <div>— Sistema pronto. Configure os parâmetros e inicie a otimização.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAP -->
+    <div id="screen-map" class="screen">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="page-title">Mapa dos Prédios</div>
+          <div class="semester-badge">Vista isométrica · Tempo real</div>
+        </div>
+      </div>
+      <div class="map-wrap">
+        <canvas id="map-canvas"></canvas>
+        <div class="map-legend">
+          <div style="font-size:10px;color:var(--text-3);font-family:var(--mono);letter-spacing:1px;margin-bottom:4px">OCUPAÇÃO</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>75–100%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>50–74%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Excesso</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#2A2A2A;border:1px solid var(--border)"></div>Disponível</div>
+        </div>
+        <div class="room-tooltip" id="room-tooltip"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modal-title">Sala ICEB 01</div>
+        <div class="modal-sub" id="modal-sub">ICEB · Capacidade: 70 alunos</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕ Fechar</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-dot"></div>
+  <span id="toast-msg">Ação realizada</span>
+</div>
+
+<script src="roomsync-ugb.js"></script>
+</body>
+</html>
